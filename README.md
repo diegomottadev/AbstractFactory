@@ -32,5 +32,5 @@ In summary, the Abstract Factory pattern allows you to create a flexible and ada
 
 ## Colaboradores
 
-• Normally, only one instance of a Concrete Factory class is created at runtime. This concrete factory creates product objects with a specific implementation. To create different product objects, clients should use a different concrete factory.
-• The Abstract Factory delegates the creation of product objects to its Concrete Factory subclass.
+- Normally, only one instance of a Concrete Factory class is created at runtime. This concrete factory creates product objects with a specific implementation. To create different product objects, clients should use a different concrete factory.
+- The Abstract Factory delegates the creation of product objects to its Concrete Factory subclass.
