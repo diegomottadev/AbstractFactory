@@ -1,4 +1,20 @@
-﻿# Abstract Factory Pattern
+﻿# Abstract Factory Pattern Implementation Using Node.js, Express, and TypeScript
+In this implementation, we'll explore how the Abstract Factory pattern is used to create maze components in a Node.js application with the Express framework, all written in TypeScript.
+
+## Installation Guide
+You'll need to install Node.js and a Node.js package manager like npm or Yarn. Then, you can follow these steps to set up your development environment:
+
+Clone the project:
+
+    git clone https://github.com/diegomottadev/AbstractFactory.git
+Install dependencies:
+
+    npm install
+Run the application
+
+    npm run dev
+
+## Definition of Abstract Factory Patter 
 
 Abstract Factory is a design pattern that provides an interface for creating families of related or dependent objects, without specifying their concrete classes.
 
