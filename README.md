@@ -120,4 +120,74 @@ FabricaDeLaberintosConBombas.ts:
             return new PuertaNormal (habitacion1, habitacion2);
         }
     }
+Let's suppose we want to do the same for enchanted mazes:
 
+We can create FabricaDeLaberintosEncantado, a factory for enchanted mazes, as a subclass of FabricaDeLaberintos. This subclass will redefine different member functions and return subclasses of Habitacion, Pared, Puerta, etc. An EnchantedMazeFactory ensures that the doors are of the subclass PuertaEncantada and that the rooms are of the subclass HabitacionEncantada:
+
+    import { FabricaDeLaberintos } from "../FabricaAbstracta/FabricaDeLaberintos";
+    import { ParedExplosionada } from "../ProductoConcretos/ParedExplosionada";
+    import { Habitacion } from "../ProductoAbstractos/Habitacion";
+    import { HabitacionConBomba } from "../ProductoConcretos/HabitacionConBomba";
+    import { Laberinto } from "../Laberinto";
+    import { Pared } from "../ProductoAbstractos/Pared";
+    import { Puerta } from "../ProductoAbstractos/Puerta";
+    import { PuertaNormal } from "../ProductoConcretos/PuertaNormal";
+    import { ParedNormal } from "../ProductoConcretos/ParedNormal";
+    import { PuertaHechiza } from "../ProductoConcretos/PuertaHechiza";
+    import { HabitacionHechizada } from "../ProductoConcretos/HabitacionHechizada";
+    
+    export class FabricaDeLaberintosEncantados extends FabricaDeLaberintos {
+        
+        hacerLaberinto(): Laberinto {
+            return new Laberinto();
+        }
+    
+        hacerPared(): Pared {
+            return new ParedNormal();
+        }
+    
+        hacerHabitacion(numero: number): Habitacion {
+            return new HabitacionHechizada(numero);
+        }
+    
+        hacerPuerta(habitacion1: Habitacion, habitacion2: Habitacion): Puerta {
+            return new PuertaHechiza(habitacion1, habitacion2);
+        }
+    }
+
+
+To construct a maze that can contain bombs, we simply call "CrearLaberinto" with a "FabricaDeLaberintosConBombas".
+
+index.js:
+
+    import express from 'express';
+    import { FabricaDeLaberintosConBombas } from './classes/FabricasConcretas/FabricaDeLaberintosConBombas';
+    import { JuegoDelLaberinto } from './classes/JuegoDeLaberinto';
+    const app = express();
+    const port = process.env.PORT || 3000;
+    
+    app.get('/', (_req, res) => {
+        const fabrica = new FabricaDeLaberintosConBombas();
+        const juego = new JuegoDelLaberinto();
+        
+        const laberinto = juego.crearLaberinto(fabrica);
+        // Construir un nuevo arreglo de habitaciones con la información de los lados
+        const habitacionesConLados = laberinto.habitaciones.map(habitacion => ({
+            numero: habitacion.numero,
+            lados: habitacion.obtenerInformacionEspecífica()
+        }));
+        res.json({
+            message: 'Laberinto creado con fábrica de laberintos con bombas.',
+            laberinto: {
+                habitaciones: habitacionesConLados
+            }
+        });
+    });
+    
+    app.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+
+Note that FabricaDeLaberintos is nothing more than a collection of factory methods. This is the most common way to implement the Abstract Factory pattern.
+
+As FabricaDeLaberintos is an abstract class consisting solely of factory methods, it's easy to create a new MazeFactory by creating a subclass that extends the abstract class and redefines the operations that need to be changed.
