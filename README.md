@@ -30,7 +30,7 @@ In summary, the Abstract Factory pattern allows you to create a flexible and ada
 
 5) Client: only uses interfaces declared by the Abstract Factory and Abstract Product classes.  Utilizes the Abstract Factory and Abstract Product interfaces to create and interact with the appropriate interactive elements based on the chosen display system, ensuring a consistent user experience across different systems.
 
-## Colaboradores
+## Collaborations
 
 - Normally, only one instance of a Concrete Factory class is created at runtime. This concrete factory creates product objects with a specific implementation. To create different product objects, clients should use a different concrete factory.
 - The Abstract Factory delegates the creation of product objects to its Concrete Factory subclass.
