@@ -138,7 +138,7 @@ FabricaDeLaberintosConBombas.ts:
     }
 Let's suppose we want to do the same for enchanted mazes:
 
-We can create FabricaDeLaberintosEncantado, a factory for enchanted mazes, as a subclass of FabricaDeLaberintos. This subclass will redefine different member functions and return subclasses of Habitacion, Pared, Puerta, etc. An EnchantedMazeFactory ensures that the doors are of the subclass PuertaEncantada and that the rooms are of the subclass HabitacionEncantada:
+We can create FabricaDeLaberintosEncantado, a factory for enchanted mazes, as a subclass of FabricaDeLaberintos. This subclass will redefine different member functions and return subclasses of Habitacion, Pared, Puerta, etc. An FabricaDeLaberintosEncantados ensures that the doors are of the subclass PuertaEncantada and that the rooms are of the subclass HabitacionEncantada:
 
     import { FabricaDeLaberintos } from "../FabricaAbstracta/FabricaDeLaberintos";
     import { ParedExplosionada } from "../ProductoConcretos/ParedExplosionada";
