@@ -34,3 +34,90 @@ In summary, the Abstract Factory pattern allows you to create a flexible and ada
 
 - Normally, only one instance of a Concrete Factory class is created at runtime. This concrete factory creates product objects with a specific implementation. To create different product objects, clients should use a different concrete factory.
 - The Abstract Factory delegates the creation of product objects to its Concrete Factory subclass.
+
+## Implementation:
+
+The abstract class FabricaDeLaberintos serves as a blueprint for creating maze components. It provides a set of methods that subclasses can implement to create different elements of a maze. Let's break down how this abstract class would be used based on the provided code:
+
+FabricaDeLaberintos.ts:
+
+    import { Habitacion } from "../ProductoAbstractos/Habitacion";
+    import { Pared } from "../ProductoAbstractos/Pared";
+    import { Puerta } from "../ProductoAbstractos/Puerta";
+    import { Laberinto } from "../Laberinto";
+    
+    
+    export abstract class FabricaDeLaberintos {
+        abstract hacerLaberinto(): Laberinto;
+        abstract hacerPared(): Pared;
+        abstract hacerHabitacion(numero: number): Habitacion;
+        abstract hacerPuerta(habitacion1: Habitacion, habitacion2: Habitacion): Puerta;
+    }
+
+The function "crearLaberinto" constructs a small maze consisting of 2 rooms with a door between them. "CrearLaberinto" hardcodes the class names in the code, making it difficult to create mazes with other components. "CrearLaberinto" addresses this limitation by taking a "FabricaDeLaberinto" as a parameter:
+
+JuegoDelLaberinto.ts
+
+    import { FabricaDeLaberintos } from "./FabricaAbstracta/FabricaDeLaberintos";
+    import { Direccion } from "./Direccion"; // Asegúrate de importar el enum Direccion
+    import { Laberinto } from "./Laberinto";
+    
+    export class JuegoDelLaberinto {
+        crearLaberinto(fabrica: FabricaDeLaberintos): Laberinto {
+            const laberinto = fabrica.hacerLaberinto();
+            const h1 = fabrica.hacerHabitacion(1);
+            const h2 = fabrica.hacerHabitacion(2);
+            const puerta = fabrica.hacerPuerta(h1, h2); // Almacena la puerta en una variable
+    
+            laberinto.anadirHabitacion(h1);
+            laberinto.anadirHabitacion(h2);
+    
+            h1.EstablecerLado(Direccion.Norte,fabrica.hacerPared());
+            h1.EstablecerLado(Direccion.Este, puerta);
+            h1.EstablecerLado(Direccion.Sur, fabrica.hacerPared());
+            h1.EstablecerLado(Direccion.Oeste,fabrica.hacerPared());
+            
+            h2.EstablecerLado(Direccion.Norte, fabrica.hacerPared());
+            h2.EstablecerLado(Direccion.Este,fabrica.hacerPared());
+            h2.EstablecerLado(Direccion.Sur, fabrica.hacerPared());
+            h2.EstablecerLado(Direccion.Oeste, puerta);
+    
+            return laberinto;
+        }
+    }
+
+We can create FabricaDeLaberintosConBombas, a factory for mazes with bombs, as a subclass of FabricaDeLaberintos. This subclass will redefine different member functions and return subclasses of Habitacion, Pared, Puerta, etc. A FabricaDeLaberintosConBombas ensures that the doors are of the subclass ParedExplosionada and that the rooms are of the subclass HabitacionConBomba.
+
+FabricaDeLaberintosConBombas.ts:
+
+    import { FabricaDeLaberintos } from "../FabricaAbstracta/FabricaDeLaberintos";
+    
+    import { ParedExplosionada } from "../ProductoConcretos/ParedExplosionada";
+    import { Habitacion } from "../ProductoAbstractos/Habitacion";
+    import { HabitacionConBomba } from "../ProductoConcretos/HabitacionConBomba";
+    import { Laberinto } from "../Laberinto";
+    import { Pared } from "../ProductoAbstractos/Pared";
+    import { Puerta } from "../ProductoAbstractos/Puerta";
+    import { PuertaNormal } from "../ProductoConcretos/PuertaNormal";
+    import { ParedNormal } from "../ProductoConcretos/ParedNormal";
+    
+    
+    export class FabricaDeLaberintosConBombas extends FabricaDeLaberintos {
+        
+        hacerLaberinto(): Laberinto {
+            return new Laberinto();
+        }
+
+        ParedExplosionada(): Pared{
+            return new ParedExplosionada();
+        }
+    
+        hacerHabitacion(numero: number): Habitacion {
+            return new HabitacionConBomba(numero);
+        }
+    
+        hacerPuerta(habitacion1: Habitacion, habitacion2: Habitacion): Puerta {
+            return new PuertaNormal (habitacion1, habitacion2);
+        }
+    }
+
